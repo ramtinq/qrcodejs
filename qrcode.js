@@ -1,12 +1,14 @@
 /**
  * @fileoverview
- * - Using the 'QRCode for Javascript library'
- * - Fixed dataset of 'QRCode for Javascript library' for support full-spec.
+ * - QRCode generator for Javascript
  * - this library has no dependencies.
  * 
  * @author davidshimjs
  * @see <a href="http://www.d-project.com/" target="_blank">http://www.d-project.com/</a>
  * @see <a href="http://jeromeetienne.github.com/jquery-qrcode/" target="_blank">http://jeromeetienne.github.com/jquery-qrcode/</a>
+ * 
+ * @author ramtinq (added support for logo)
+ * @see <a href="https://github.com/ramtinq/qrcodejs" target="_blank">https://github.com/ramtinq/qrcodejs</a>
  */
 var QRCode;
 
@@ -357,6 +359,7 @@ var QRCode;
 			this._elCanvas = document.createElement("canvas");
 			this._elCanvas.width = htOption.width;
 			this._elCanvas.height = htOption.height;
+			this._elCanvas.style.display = 'none';
 			el.appendChild(this._elCanvas);
 			this._el = el;
 			this._oContext = this._elCanvas.getContext("2d");
@@ -366,6 +369,16 @@ var QRCode;
 			this._elImage.style.display = "none";
 			this._el.appendChild(this._elImage);
 			this._bSupportDataURI = null;
+			if('logo' in htOption) { 
+				this._logoImage = new Image();
+				if('logoBgTransparent' in this._htOption && this._htOption.logoBgTransparent == true ) return;
+				if(! 'logoBgColor' in this._htOption ) {
+					this._htOption.logoBgColor = this._htOption.colorLight;
+				}
+				if(! 'logoBorderColor' in this._htOption ) {
+					this._htOption.logoBorderColor = this._htOption.colorLight;
+				}
+			}
 		};
 			
 		/**
@@ -412,6 +425,22 @@ var QRCode;
 						nRoundedHeight
 					);
 				}
+			}
+			if('logo' in _htOption) {
+				let delta = Math.round(this._elCanvas.width / 3);
+				let half = Math.round(this._elCanvas.width / 2);
+				let margin = Math.round(delta / 8);
+
+				_oContext.arc(half, half, Math.round(delta / 2), 0, 2 * Math.PI);
+
+				if(! this._htOption.logoBgTransparent) {
+					_oContext.strokeStyle = _htOption.logoBorderColor;
+					_oContext.fillStyle = _htOption.logoBgColor;
+					_oContext.stroke();
+					_oContext.fill();
+				}
+
+				_oContext.drawImage(this._logoImage, delta + margin, delta + margin, delta - 2 * margin, delta - 2 * margin);
 			}
 			
 			this._bIsPainted = true;
@@ -579,6 +608,19 @@ var QRCode;
 	 * @param {String} sText link data
 	 */
 	QRCode.prototype.makeCode = function (sText) {
+		if('logo' in this._htOption) {
+			var self = this;
+			this._oDrawing._logoImage.onload = function() {
+				self._oQRCode = new QRCodeModel(_getTypeNumber(sText, self._htOption.correctLevel), self._htOption.correctLevel);
+				self._oQRCode.addData(sText);
+				self._oQRCode.make();
+				self._el.title = sText;
+				self._oDrawing.draw(self._oQRCode);		
+				self.makeImage();
+			};
+			this._oDrawing._logoImage.src = this._htOption.logo;
+			return;
+		}
 		this._oQRCode = new QRCodeModel(_getTypeNumber(sText, this._htOption.correctLevel), this._htOption.correctLevel);
 		this._oQRCode.addData(sText);
 		this._oQRCode.make();
@@ -611,4 +653,5 @@ var QRCode;
 	 * @name QRCode.CorrectLevel
 	 */
 	QRCode.CorrectLevel = QRErrorCorrectLevel;
+	window.QRCode = QRCode;
 })();
