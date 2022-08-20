@@ -26,6 +26,25 @@ var qrcode = new QRCode(document.getElementById("qrcode"), {
 </script>
 ```
 
+## Adding logo (functionality added by [@ramtinq](https://github.com/ramtinq/qrcodejs))
+
+```
+<div id="qrcode"></div>
+<script type="text/javascript">
+var qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: "http://jindo.dev.naver.com/collie",
+	width: 128,
+	height: 128,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H,
+	logo : '/images/logo.png',
+	logoBgColor: '#ffffff',
+	logoBorderColor: '#777',
+});
+</script>
+```
+
 and you can use some methods
 
 ```
