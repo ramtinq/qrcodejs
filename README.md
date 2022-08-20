@@ -26,6 +26,13 @@ var qrcode = new QRCode(document.getElementById("qrcode"), {
 </script>
 ```
 
+and you can use some methods
+
+```
+qrcode.clear(); // clear the code.
+qrcode.makeCode("http://naver.com"); // make another code.
+```
+
 ## Adding logo (functionality added by [@ramtinq](https://github.com/ramtinq/qrcodejs))
 
 ```
@@ -43,13 +50,6 @@ var qrcode = new QRCode(document.getElementById("qrcode"), {
 	logoBorderColor: '#777',
 });
 </script>
-```
-
-and you can use some methods
-
-```
-qrcode.clear(); // clear the code.
-qrcode.makeCode("http://naver.com"); // make another code.
 ```
 
 ## Browser Compatibility
