@@ -33,7 +33,7 @@ qrcode.clear(); // clear the code.
 qrcode.makeCode("http://naver.com"); // make another code.
 ```
 
-## Adding logo (functionality added by [@ramtinq](https://github.com/ramtinq/qrcodejs))
+## Adding logo (functionality added by [@ramtinq](https://github.com/ramtinq))
 
 ```
 <div id="qrcode"></div>
